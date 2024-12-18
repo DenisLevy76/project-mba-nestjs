@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Seller {
+  id           String    @id @default(cuid())
+  name         String
+  phone        String
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  product      Product[]
+
+  @@map("sellers")
+}
+
+enum ProductStatus {
+  available
+  sold
+  cancelled
+}
+
+model ProductCategory {
+  id       String    @id @default(cuid())
+  title    String
+  slug     String
+  products Product[]
+
+  @@map("product_categories")
+}
+
+model Product {
+  id           String          @id @default(cuid())
+  name         String
+  description  String
+  priceInCents Int             @map("price_in_cents")
+  category     ProductCategory @relation(fields: [productCategoryId], references: [id])
+
+  owner Seller @relation(fields: [sellerId], references: [id])
+
+  status            ProductStatus @default(available)
+  sellerId          String
+  productCategoryId String
+
+  @@map("products")
+}
