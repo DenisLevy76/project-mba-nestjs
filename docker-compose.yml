@@ -1,0 +1,12 @@
+services:
+  postgresql:
+    image: bitnami/postgresql:latest
+    container_name: mba-nest-marketplace
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=mba-nest-marketplace
+    volumes:
+      - ./data:/bitnami/postgresql
