@@ -1,6 +1,14 @@
 ## Funcionalidades e Regras
 https://docs-rocketseat.notion.site/Desafio-pr-tico-Marketplace-API-c036218d71f24bfa9d707ea5b05dd319
 
+Entidades:
+  Usuário -> Seller
+  Produto -> Product
+  Arquivo -> Attachment
+  Categoria -> Category
+
+
+RNF e RFs:
 - [ ] Deve ser possível cadastrar novos usuários
   - [ ] Deve ser feito o hash da senha do usuário
   - [ ] Não deve ser possível cadastrar usuário com e-mail duplicado
