@@ -4,7 +4,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 import { ProductStatus } from './enums/product-status'
 
-interface ISellerProps {
+interface IProductProps {
   name: string
   description: string
   priceInCents: number
@@ -18,7 +18,7 @@ interface ISellerProps {
   updatedAt?: Date
 }
 
-export class Seller extends Entity<ISellerProps> {
+export class Product extends Entity<IProductProps> {
   get name() {
     return this.props.name
   }
@@ -57,15 +57,19 @@ export class Seller extends Entity<ISellerProps> {
     return this.props.updatedAt
   }
 
+  get createdAt() {
+    return this.props.createdAt
+  }
+
   private touch() {
     this.props.updatedAt = new Date()
   }
 
   public static create(
-    props: Optional<ISellerProps, 'createdAt' | 'status'>,
+    props: Optional<IProductProps, 'createdAt' | 'status'>,
     id?: UniqueEntityID,
   ) {
-    const seller = new Seller(
+    const product = new Product(
       {
         ...props,
         createdAt: props.createdAt || new Date(),
@@ -74,6 +78,6 @@ export class Seller extends Entity<ISellerProps> {
       id,
     )
 
-    return seller
+    return product
   }
 }
