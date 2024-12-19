@@ -42,20 +42,20 @@ model ProductCategory {
 }
 
 model Product {
-  id           String          @id @default(cuid())
-  name         String
-  description  String
-  priceInCents Int             @map("price_in_cents")
-  category     ProductCategory @relation(fields: [productCategoryId], references: [id])
+  id                String          @id @default(cuid())
+  name              String
+  description       String
+  priceInCents      Int             @map("price_in_cents")
+  category          ProductCategory @relation(fields: [productCategoryId], references: [id])
+  productCategoryId String          @map("product_category_id")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @map("updated_at")
 
-  owner Seller @relation(fields: [sellerId], references: [id])
+  owner   Seller @relation(fields: [ownerId], references: [id])
+  ownerId String @map("owner_id")
 
-  status            ProductStatus @default(available)
-  sellerId          String
-  productCategoryId String
+  status ProductStatus @default(available)
 
   @@map("products")
 }
