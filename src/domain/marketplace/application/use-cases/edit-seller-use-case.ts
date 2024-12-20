@@ -6,7 +6,7 @@ import { ISellerRepository } from '../repositories/seller-repository'
 import { ResourceAlreadyExistsError } from './errors/resource-already-exists-error'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
-export interface IUpdateSellerRequest {
+export interface IEditSellerRequest {
   sellerId: UniqueEntityID
   name: string
   email: string
@@ -14,9 +14,9 @@ export interface IUpdateSellerRequest {
   passwordHash: string
 }
 
-type TUpdateSellerResponse = Either<ResourceNotFoundError, { seller: Seller }>
+type TEditSellerResponse = Either<ResourceNotFoundError, { seller: Seller }>
 
-export class UpdateSellerUseCase {
+export class EditSellerUseCase {
   constructor(private sellerRepository: ISellerRepository) {}
 
   async execute({
@@ -25,7 +25,7 @@ export class UpdateSellerUseCase {
     name,
     passwordHash,
     phone,
-  }: IUpdateSellerRequest): Promise<TUpdateSellerResponse> {
+  }: IEditSellerRequest): Promise<TEditSellerResponse> {
     const seller = await this.sellerRepository.findById(sellerId.toString())
 
     if (!seller) return left(new ResourceNotFoundError())
