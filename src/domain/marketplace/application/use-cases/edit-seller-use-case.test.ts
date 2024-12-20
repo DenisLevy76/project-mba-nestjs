@@ -2,21 +2,32 @@ import { makeSeller } from 'test/factories/make-seller'
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 import { describe, expect, it } from 'vitest'
 
-import { CreateSellerUseCase } from './create-seller-use-case'
+import { EditSellerUseCase } from './edit-seller-use-case'
 
-describe('CreateSellerUseCase', () => {
+describe('EditSellerUseCase', () => {
   let inMemorySellersRepository: InMemorySellersRepository
-  let createSellerUseCase: CreateSellerUseCase
+  let editSellerUseCase: EditSellerUseCase
 
   beforeEach(() => {
     inMemorySellersRepository = new InMemorySellersRepository()
-    createSellerUseCase = new CreateSellerUseCase(inMemorySellersRepository)
+    editSellerUseCase = new EditSellerUseCase(inMemorySellersRepository)
   })
 
-  it('should create a seller and save it in the repository', async () => {
+  it('should edit a seller and save it in the repository', async () => {
     const seller = makeSeller()
+    const newEmail = 'test@test.dev'
 
-    const response = await createSellerUseCase.execute(seller)
+    inMemorySellersRepository.db.push(seller)
+
+    const response = await editSellerUseCase.execute({
+      sellerId: seller.id,
+      email: newEmail,
+      name: seller.name,
+      passwordHash: seller.passwordHash,
+      phone: seller.phone,
+    })
+
+    console.log(response.value)
 
     expect(inMemorySellersRepository.db).toHaveLength(1)
     expect(response.isRight()).toEqual(true)
@@ -24,21 +35,10 @@ describe('CreateSellerUseCase', () => {
       expect(response.value.seller).toEqual(
         expect.objectContaining({
           props: expect.objectContaining({
-            name: seller.name,
-            email: seller.email,
-            passwordHash: seller.passwordHash,
-            phone: seller.phone,
+            email: newEmail,
           }),
         }),
       )
     }
-    expect(inMemorySellersRepository.db).toEqual([
-      expect.objectContaining({
-        name: seller.name,
-        email: seller.email,
-        passwordHash: seller.passwordHash,
-        phone: seller.phone,
-      }),
-    ])
   })
 })

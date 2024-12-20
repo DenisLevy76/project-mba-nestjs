@@ -29,10 +29,23 @@ export class EditSellerUseCase {
     const seller = await this.sellerRepository.findById(sellerId.toString())
 
     if (!seller) return left(new ResourceNotFoundError())
-    if (await this.sellerRepository.findByEmail(email))
-      return left(new ResourceAlreadyExistsError('Email'))
-    if (await this.sellerRepository.findByPhone(phone))
-      return left(new ResourceAlreadyExistsError('Phone'))
+
+    if (email !== seller.email) {
+      const hasAnotherSellerWithSameEmail =
+        await this.sellerRepository.findByEmail(email)
+
+      if (hasAnotherSellerWithSameEmail) {
+        return left(new ResourceAlreadyExistsError('Email'))
+      }
+    }
+
+    if (phone !== seller.phone) {
+      const hasAnotherSellerWithSamePhone =
+        await this.sellerRepository.findByPhone(phone)
+
+      if (hasAnotherSellerWithSamePhone)
+        return left(new ResourceAlreadyExistsError('Phone'))
+    }
 
     seller.email = email
     seller.name = name
