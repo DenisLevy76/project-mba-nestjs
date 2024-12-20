@@ -1,5 +1,3 @@
-import { describe, expect, it } from 'vitest'
-
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ProductStatus } from '@/domain/marketplace/enterprise/entities/enums/product-status'
 

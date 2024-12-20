@@ -1,5 +1,3 @@
-import { describe, expect, it } from 'vitest'
-
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 import { Seller } from './seller'

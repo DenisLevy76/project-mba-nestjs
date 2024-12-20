@@ -2,34 +2,31 @@ import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-r
 import { describe, expect, it } from 'vitest'
 
 import { CreateSellerUseCase } from './create-seller-use-case'
+import { makerSeller } from 'test/factories/make-seller'
 
 describe('CreateSellerUseCase', () => {
   let inMemorySellersRepository: InMemorySellersRepository
+  let createSellerUseCase: CreateSellerUseCase
 
   beforeEach(() => {
     inMemorySellersRepository = new InMemorySellersRepository()
-  })
-  it('should create a seller and save it in the repository', async () => {
-    const createSellerUseCase = new CreateSellerUseCase(
+    createSellerUseCase = new CreateSellerUseCase(
       inMemorySellersRepository,
     )
+  })
 
-    const request = {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      passwordHash: 'hashed_password',
-      phone: '123456789',
-    }
+  it('should create a seller and save it in the repository', async () => {
+    const seller = makerSeller()
 
-    await createSellerUseCase.execute(request)
+    await createSellerUseCase.execute(seller)
 
     expect(inMemorySellersRepository.db).toHaveLength(1)
     expect(inMemorySellersRepository.db).toEqual([
       expect.objectContaining({
-        name: request.name,
-        email: request.email,
-        passwordHash: request.passwordHash,
-        phone: request.phone,
+        name: seller.name,
+        email: seller.email,
+        passwordHash: seller.passwordHash,
+        phone: seller.phone,
       }),
     ])
   })
