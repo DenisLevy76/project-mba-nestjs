@@ -2,6 +2,7 @@ import { Either, left, right } from '@/core/either'
 
 import { Seller } from '../../enterprise/entities/seller'
 import { ISellerRepository } from '../repositories/seller-repository'
+import { ResourceAlreadyExistsError } from './errors/resource-already-exists-error'
 
 export interface ICreateSellerRequest {
   name: string
@@ -10,7 +11,10 @@ export interface ICreateSellerRequest {
   phone: string
 }
 
-type TCreateSellerResponse = Either<string, { seller: Seller }>
+type TCreateSellerResponse = Either<
+  ResourceAlreadyExistsError,
+  { seller: Seller }
+>
 
 export class CreateSellerUseCase {
   constructor(private sellerRepository: ISellerRepository) {}
@@ -22,9 +26,9 @@ export class CreateSellerUseCase {
     phone,
   }: ICreateSellerRequest): Promise<TCreateSellerResponse> {
     if (await this.sellerRepository.findByEmail(email))
-      return left('Email already exists.')
+      return left(new ResourceAlreadyExistsError('Email'))
     if (await this.sellerRepository.findByPhone(phone)) {
-      return left('Phone already exists.')
+      return left(new ResourceAlreadyExistsError('Phone'))
     }
 
     const seller = Seller.create({
