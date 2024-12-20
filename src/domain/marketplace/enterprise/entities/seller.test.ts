@@ -1,3 +1,5 @@
+import { makeSeller } from 'test/factories/make-seller'
+
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 import { Seller } from './seller'
@@ -22,26 +24,13 @@ describe('Seller Entity', () => {
 
   it('should create a seller with a custom UniqueEntityID', () => {
     const customId = new UniqueEntityID()
-    const seller = Seller.create(
-      {
-        name: 'Jane Doe',
-        phone: '987654321',
-        email: 'jane.doe@example.com',
-        passwordHash: 'hashed_password',
-      },
-      customId,
-    )
+    const seller = makeSeller({}, customId)
 
     expect(seller.id).toBe(customId)
   })
 
   it('should update the name and set updatedAt', () => {
-    const seller = Seller.create({
-      name: 'John Doe',
-      phone: '123456789',
-      email: 'john.doe@example.com',
-      passwordHash: 'hashed_password',
-    })
+    const seller = makeSeller()
 
     expect(seller.updatedAt).toBeUndefined()
 
@@ -51,16 +40,32 @@ describe('Seller Entity', () => {
     expect(seller.updatedAt).toBeInstanceOf(Date)
   })
 
+  it('should update the phone and set updatedAt', () => {
+    const seller = makeSeller()
+
+    expect(seller.updatedAt).toBeUndefined()
+
+    seller.phone = '12123451234'
+
+    expect(seller.phone).toBe('12123451234')
+    expect(seller.updatedAt).toBeInstanceOf(Date)
+  })
+
+  it('should update the email and set updatedAt', () => {
+    const seller = makeSeller()
+
+    expect(seller.updatedAt).toBeUndefined()
+
+    seller.email = 'test@test.dev'
+
+    expect(seller.email).toBe('test@test.dev')
+    expect(seller.updatedAt).toBeInstanceOf(Date)
+  })
+
   it('should preserve createdAt when updating name', () => {
     const createdAt = new Date('2023-01-01T00:00:00Z')
 
-    const seller = Seller.create({
-      name: 'John Doe',
-      phone: '123456789',
-      email: 'john.doe@example.com',
-      passwordHash: 'hashed_password',
-      createdAt,
-    })
+    const seller = makeSeller({ createdAt })
 
     seller.name = 'John Smith'
 

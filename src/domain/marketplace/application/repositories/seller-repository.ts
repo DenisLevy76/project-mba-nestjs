@@ -15,4 +15,5 @@ export interface ISellerRepository {
   findById(id: string): Promise<Seller | null>
   findByPhone(phone: string): Promise<Seller | null>
   findByEmail(email: string): Promise<Seller | null>
+  save: (seller: Seller) => Promise<void>
 }

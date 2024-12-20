@@ -1,14 +1,25 @@
-import { ISellerProps, Seller } from "@/domain/marketplace/enterprise/entities/seller"
-import {faker} from "@faker-js/faker"
+import { faker } from '@faker-js/faker'
 
-export const makerSeller = (override: Partial<ISellerProps> = {}) => {
-  const seller = Seller.create({
-    email: faker.internet.email(),
-    name: faker.person.fullName(),
-    passwordHash: faker.internet.password(),
-    phone: faker.phone.number(),
-    ...override
-  })
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import {
+  ISellerProps,
+  Seller,
+} from '@/domain/marketplace/enterprise/entities/seller'
+
+export const makeSeller = (
+  override: Partial<ISellerProps> = {},
+  id?: UniqueEntityID,
+) => {
+  const seller = Seller.create(
+    {
+      email: faker.internet.email(),
+      name: faker.person.fullName(),
+      passwordHash: faker.internet.password(),
+      phone: faker.phone.number(),
+      ...override,
+    },
+    id,
+  )
 
   return seller
 }

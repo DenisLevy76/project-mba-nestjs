@@ -1,4 +1,4 @@
-import { makerSeller } from 'test/factories/make-seller'
+import { makeSeller } from 'test/factories/make-seller'
 import { InMemorySellersRepository } from 'test/repositories/in-memory-sellers-repository'
 import { describe, expect, it } from 'vitest'
 
@@ -15,7 +15,7 @@ describe('CreateSellerUseCase', () => {
   })
 
   it('should create a seller and save it in the repository', async () => {
-    const seller = makerSeller()
+    const seller = makeSeller()
 
     const response = await createSellerUseCase.execute(seller)
 
@@ -44,11 +44,11 @@ describe('CreateSellerUseCase', () => {
   })
 
   it('should not create a seller with a email thats already exists', async () => {
-    const seller = makerSeller({ email: 'test@test.dev' })
+    const seller = makeSeller({ email: 'test@test.dev' })
 
     await createSellerUseCase.execute(seller)
 
-    const seller2 = makerSeller({ email: 'test@test.dev' })
+    const seller2 = makeSeller({ email: 'test@test.dev' })
 
     const response = await createSellerUseCase.execute(seller2)
 
@@ -58,11 +58,11 @@ describe('CreateSellerUseCase', () => {
   })
 
   it('should create 2 sellers with 2 different emails', async () => {
-    const seller = makerSeller()
+    const seller = makeSeller()
 
     await createSellerUseCase.execute(seller)
 
-    const seller2 = makerSeller()
+    const seller2 = makeSeller()
 
     const response = await createSellerUseCase.execute(seller2)
 
@@ -71,11 +71,11 @@ describe('CreateSellerUseCase', () => {
   })
 
   it('should not create a seller with a phone number thats already exists', async () => {
-    const seller = makerSeller({ phone: '99999999999' })
+    const seller = makeSeller({ phone: '99999999999' })
 
     await createSellerUseCase.execute(seller)
 
-    const seller2 = makerSeller({ phone: '99999999999' })
+    const seller2 = makeSeller({ phone: '99999999999' })
 
     const response = await createSellerUseCase.execute(seller2)
 
@@ -85,11 +85,11 @@ describe('CreateSellerUseCase', () => {
   })
 
   it('should create 2 sellers with 2 different phones', async () => {
-    const seller = makerSeller()
+    const seller = makeSeller()
 
     await createSellerUseCase.execute(seller)
 
-    const seller2 = makerSeller()
+    const seller2 = makeSeller()
 
     const response = await createSellerUseCase.execute(seller2)
 

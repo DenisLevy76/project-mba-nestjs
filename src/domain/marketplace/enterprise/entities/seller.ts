@@ -42,6 +42,21 @@ export class Seller extends Entity<ISellerProps> {
     this.touch()
   }
 
+  set email(email: string) {
+    this.props.email = email
+    this.touch()
+  }
+
+  set phone(phone: string) {
+    this.props.phone = phone
+    this.touch()
+  }
+
+  set passwordHash(passwordHash: string) {
+    this.props.passwordHash = passwordHash
+    this.touch()
+  }
+
   private touch() {
     this.props.updatedAt = new Date()
   }
