@@ -13,4 +13,6 @@ export interface ISellerRepository {
     itemsPerPage: number
   }): Promise<IPaginatedResponse<Seller[]>>
   findById(id: string): Promise<Seller | null>
+  findByPhone(phone: string): Promise<Seller | null>
+  findByEmail(email: string): Promise<Seller | null>
 }

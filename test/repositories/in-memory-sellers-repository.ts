@@ -5,6 +5,19 @@ import { Seller } from '@/domain/marketplace/enterprise/entities/seller'
 export class InMemorySellersRepository implements ISellerRepository {
   public db: Seller[] = []
 
+  
+  async findById(id: string): Promise<Seller | null> {
+    return this.db.find((seller) => seller.id.toString() === id) || null
+  }
+
+  async findByPhone(phone: string): Promise<Seller | null> {
+    return this.db.find(seller => seller.phone === phone)
+  }
+
+  async findByEmail(email: string): Promise<Seller | null> {
+    return this.db.find(seller => seller.email === email)
+  }
+
   async create(seller: Seller): Promise<void> {
     this.db.push(seller)
   }
@@ -26,9 +39,5 @@ export class InMemorySellersRepository implements ISellerRepository {
       totalPages: Math.ceil(this.db.length / itemsPerPage),
       currentPage: page,
     }
-  }
-
-  async findById(id: string): Promise<Seller | null> {
-    return this.db.find((seller) => seller.id.toString() === id) || null
   }
 }
