@@ -4,7 +4,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 import { ProductStatus } from './enums/product-status'
 
-interface IProductProps {
+export interface IProductProps {
   name: string
   description: string
   priceInCents: number

@@ -6,7 +6,7 @@ describe('Attachment Entity', () => {
   it('should create a attachment with required properties', () => {
     const props = {
       fileName: 'Blue Pencil',
-      productId: new UniqueEntityID( "product1")
+      productId: new UniqueEntityID('product1'),
     }
 
     const attachment = Attachment.create(props)
@@ -21,7 +21,7 @@ describe('Attachment Entity', () => {
     const customId = new UniqueEntityID()
     const props = {
       fileName: 'Blue Pencil',
-      productId: new UniqueEntityID( "product1")
+      productId: new UniqueEntityID('product1'),
     }
 
     const attachment = Attachment.create(props, customId)

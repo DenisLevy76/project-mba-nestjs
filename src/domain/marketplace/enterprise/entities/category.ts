@@ -4,7 +4,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 import { Slug } from './value-objects/slug'
 
-interface ICategoryProps {
+export interface ICategoryProps {
   title: string
   slug: Slug
 
