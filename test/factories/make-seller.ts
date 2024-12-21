@@ -14,7 +14,7 @@ export const makeSeller = (
     {
       email: faker.internet.email(),
       name: faker.person.fullName(),
-      passwordHash: faker.internet.password(),
+      passwordHash: `hashed-${faker.internet.password()}`,
       phone: faker.phone.number(),
       ...override,
     },
