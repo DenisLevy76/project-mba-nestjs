@@ -34,8 +34,8 @@ RNF e RFs:
 
 - [x] Deve ser possível obter dados de um Produto
   - [x] Qualquer usuário deve poder obter dados do Produto
-- [ ] Deve ser possível listar todas as categorias
-  - [ ] Qualquer usuário deve poder obter a lista de categorias
+- [x] Deve ser possível listar todas as categorias
+  - [x] Qualquer usuário deve poder obter a lista de categorias
 - [ ] Deve ser possível listar todos os produtos por ordem de criação (mais recente)
   - [ ] Qualquer usuário deve poder obter a lista de produtos
 - [ ] Deve ser possível realizar paginação pela lista de produtos

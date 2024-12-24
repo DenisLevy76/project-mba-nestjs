@@ -23,7 +23,7 @@ export class InMemoryCategoryRepository implements ICategoryRepository {
     return {
       count: this.db.length,
       currentPage: page,
-      data: this.db,
+      data: this.db.slice((page - 1) * itemsPerPage, page * itemsPerPage),
       totalPages: Math.ceil(this.db.length / itemsPerPage),
     }
   }
