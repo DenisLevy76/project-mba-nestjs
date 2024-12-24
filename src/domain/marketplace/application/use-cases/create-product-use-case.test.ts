@@ -10,6 +10,7 @@ import { ICategoryRepository } from '../repositories/category-repository'
 import { IProductRepository } from '../repositories/product-repository'
 import { ISellerRepository } from '../repositories/seller-repository'
 import { CreateProductUseCase } from './create-product-use-case'
+import { InvalidPriceError } from './errors/invalid-price-error'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 describe('CreateSellerUseCase', () => {
@@ -91,5 +92,25 @@ describe('CreateSellerUseCase', () => {
       expect(productRepository.db).toHaveLength(1)
       expect(productRepository.db[0]).toEqual(product)
     }
+  })
+
+  it('should not create a product with negative price.', async () => {
+    const seller = makeSeller()
+    sellerRepository.db.push(seller)
+
+    const category = makeCategory()
+    categoryRepository.db.push(category)
+
+    const response = await sut.execute({
+      name: 'Product A',
+      description: 'Description A',
+      priceInCents: -1000,
+      categoryId: category.id.toString(),
+      ownerId: seller.id.toString(),
+      status: ProductStatus.available,
+    })
+
+    expect(response.isLeft()).toBe(true)
+    expect(response.value).toBeInstanceOf(InvalidPriceError)
   })
 })

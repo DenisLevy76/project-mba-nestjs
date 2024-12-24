@@ -32,8 +32,18 @@ export class Product extends Entity<IProductProps> {
     return this.props.description
   }
 
+  set description(newDescription: string) {
+    this.props.description = newDescription
+    this.touch()
+  }
+
   get priceInCents() {
     return this.props.priceInCents
+  }
+
+  set priceInCents(newPrice: number) {
+    this.props.priceInCents = newPrice
+    this.touch()
   }
 
   get ownerId() {
@@ -42,6 +52,11 @@ export class Product extends Entity<IProductProps> {
 
   get categoryId() {
     return this.props.categoryId
+  }
+
+  set categoryId(newCategoryId: UniqueEntityID) {
+    this.props.categoryId = newCategoryId
+    this.touch()
   }
 
   get status() {
