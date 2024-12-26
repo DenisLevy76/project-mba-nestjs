@@ -11,6 +11,7 @@ export interface IProductRepository {
   }: {
     page: number
     itemsPerPage: number
+    orderBy?: 'latest' | 'alphabetic'
   }): Promise<IPaginatedResponse<Product[]>>
   findById(id: string): Promise<Product | null>
   save: (product: Product) => Promise<void>

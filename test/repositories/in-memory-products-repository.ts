@@ -8,14 +8,30 @@ export class InMemoryProductRepository implements IProductRepository {
   async list({
     page,
     itemsPerPage,
+    orderBy,
   }: {
     page: number
     itemsPerPage: number
+    orderBy?: 'latest' | 'alphabetic'
   }): Promise<IPaginatedResponse<Product[]>> {
+    const sortedData = [...this.db]
+
+    if (orderBy === 'latest') {
+      sortedData.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    } else if (orderBy === 'alphabetic') {
+      sortedData.sort((a, b) => a.name.localeCompare(b.name))
+    }
+
+    const startIndex = (page - 1) * itemsPerPage
+    const paginatedData = sortedData.slice(
+      startIndex,
+      startIndex + itemsPerPage,
+    )
+
     return {
       count: this.db.length,
       currentPage: page,
-      data: this.db,
+      data: paginatedData,
       totalPages: Math.ceil(this.db.length / itemsPerPage),
     }
   }
@@ -25,9 +41,7 @@ export class InMemoryProductRepository implements IProductRepository {
   }
 
   async save(product: Product) {
-    const productIndex = this.db.findIndex((product) =>
-      product.id.equals(product.id),
-    )
+    const productIndex = this.db.findIndex((prod) => prod.id.equals(product.id))
 
     this.db[productIndex] = product
   }

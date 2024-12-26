@@ -3,17 +3,13 @@ import { Either, right } from '@/core/either'
 
 import { Category } from '../../enterprise/entities/category'
 import { ICategoryRepository } from '../repositories/category-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 export interface IFetchCategoriesRequest {
   page?: number
   itemsPerPage?: number
 }
 
-type TFetchCategoriesResponse = Either<
-  ResourceNotFoundError,
-  IPaginatedResponse<Category[]>
->
+type TFetchCategoriesResponse = Either<null, IPaginatedResponse<Category[]>>
 
 export class FetchCategoriesUseCase {
   constructor(private categoryRepository: ICategoryRepository) {}
