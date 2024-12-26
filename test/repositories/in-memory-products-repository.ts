@@ -1,5 +1,6 @@
 import { IPaginatedResponse } from '@/core/@types/paginated-response'
 import { IProductRepository } from '@/domain/marketplace/application/repositories/product-repository'
+import { ProductStatus } from '@/domain/marketplace/enterprise/entities/enums/product-status'
 import { Product } from '@/domain/marketplace/enterprise/entities/product'
 
 export class InMemoryProductRepository implements IProductRepository {
@@ -9,10 +10,12 @@ export class InMemoryProductRepository implements IProductRepository {
     page,
     itemsPerPage,
     orderBy,
+    filters,
   }: {
     page: number
     itemsPerPage: number
     orderBy?: 'latest' | 'alphabetic'
+    filters?: { status?: ProductStatus }
   }): Promise<IPaginatedResponse<Product[]>> {
     const sortedData = [...this.db]
 
@@ -23,10 +26,16 @@ export class InMemoryProductRepository implements IProductRepository {
     }
 
     const startIndex = (page - 1) * itemsPerPage
-    const paginatedData = sortedData.slice(
-      startIndex,
-      startIndex + itemsPerPage,
-    )
+    const paginatedData = sortedData
+      .filter((product) => {
+        if (filters) {
+          if (filters.status) {
+            return product.status === filters.status
+          }
+        }
+        return true
+      })
+      .slice(startIndex, startIndex + itemsPerPage)
 
     return {
       count: this.db.length,

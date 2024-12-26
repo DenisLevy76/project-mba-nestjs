@@ -1,6 +1,7 @@
 import { makeProduct } from 'test/factories/make-product'
 import { InMemoryProductRepository } from 'test/repositories/in-memory-products-repository'
 
+import { ProductStatus } from '../../enterprise/entities/enums/product-status'
 import { IProductRepository } from '../repositories/product-repository'
 import { FetchProductsUseCase } from './fetch-products-use-case'
 
@@ -13,7 +14,7 @@ describe('CreateSellerUseCase', () => {
     sut = new FetchProductsUseCase(productRepository)
   })
 
-  it('should list all categories.', async () => {
+  it('should list all products.', async () => {
     Array.from({ length: 3 }).forEach(() => {
       const product = makeProduct()
 
@@ -44,12 +45,36 @@ describe('CreateSellerUseCase', () => {
     if (response.isRight()) {
       const products = response.value.data
 
-      console.log({ products })
-
       expect(products).toHaveLength(3)
       expect(products[0].createdAt).toBe(recentProduct.createdAt)
       expect(products[1].createdAt).toBe(middleProduct.createdAt)
       expect(products[2].createdAt).toBe(olderProduct.createdAt)
+    }
+  })
+
+  it('should list products ordered from most recent to oldest.', async () => {
+    const product1 = makeProduct({ status: ProductStatus.cancelled })
+    const product2 = makeProduct({ status: ProductStatus.sold })
+    const product3 = makeProduct({ status: ProductStatus.sold })
+    const product4 = makeProduct({ status: ProductStatus.available })
+    const product5 = makeProduct({ status: ProductStatus.available })
+
+    productRepository.create(product1)
+    productRepository.create(product2)
+    productRepository.create(product3)
+    productRepository.create(product4)
+    productRepository.create(product5)
+
+    const response = await sut.execute({
+      filters: { status: ProductStatus.sold },
+    })
+
+    expect(response.isRight()).toBe(true)
+
+    if (response.isRight()) {
+      const products = response.value.data
+
+      expect(products).toHaveLength(2)
     }
   })
 })
