@@ -6,6 +6,47 @@ import { Product } from '@/domain/marketplace/enterprise/entities/product'
 export class InMemoryProductRepository implements IProductRepository {
   db: Product[] = []
 
+  async search({
+    query,
+    page,
+    itemsPerPage,
+  }: {
+    page: number
+    itemsPerPage: number
+    query: string
+  }): Promise<IPaginatedResponse<Product[]>> {
+    const normalizeString = (str: string) =>
+      str
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLocaleLowerCase()
+
+    const normalizedQuery = normalizeString(query)
+
+    const sortedData = [...this.db].filter((product) => {
+      const normalizedName = normalizeString(product.name)
+      const normalizedDescription = normalizeString(product.description)
+
+      return (
+        normalizedName.includes(normalizedQuery) ||
+        normalizedDescription.includes(normalizedQuery)
+      )
+    })
+
+    const startIndex = (page - 1) * itemsPerPage
+    const paginatedData = sortedData.slice(
+      startIndex,
+      startIndex + itemsPerPage,
+    )
+
+    return {
+      count: this.db.length,
+      currentPage: page,
+      data: paginatedData,
+      totalPages: Math.ceil(this.db.length / itemsPerPage),
+    }
+  }
+
   async list({
     page,
     itemsPerPage,

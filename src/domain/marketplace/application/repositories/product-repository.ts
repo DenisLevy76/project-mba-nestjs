@@ -18,5 +18,14 @@ export interface IProductRepository {
     filters?: { status?: ProductStatus }
   }): Promise<IPaginatedResponse<Product[]>>
   findById(id: string): Promise<Product | null>
+  search({
+    query,
+    page,
+    itemsPerPage,
+  }: {
+    page: number
+    itemsPerPage: number
+    query: string
+  }): Promise<IPaginatedResponse<Product[]>>
   save: (product: Product) => Promise<void>
 }
