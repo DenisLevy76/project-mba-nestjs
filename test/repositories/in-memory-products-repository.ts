@@ -56,7 +56,7 @@ export class InMemoryProductRepository implements IProductRepository {
     page: number
     itemsPerPage: number
     orderBy?: 'latest' | 'alphabetic'
-    filters?: { status?: ProductStatus }
+    filters?: { status?: ProductStatus; ownerId: string }
   }): Promise<IPaginatedResponse<Product[]>> {
     const sortedData = [...this.db]
 
@@ -70,12 +70,23 @@ export class InMemoryProductRepository implements IProductRepository {
     const paginatedData = sortedData
       .filter((product) => {
         if (filters) {
+          let matchStatus = true
+          let matchOwner = true
+
           if (filters.status) {
-            return product.status === filters.status
+            matchStatus = filters.status === product.status
           }
+
+          if (filters.ownerId) {
+            matchOwner = filters.ownerId === product.ownerId.toString()
+          }
+
+          return matchStatus && matchOwner
         }
+
         return true
       })
+
       .slice(startIndex, startIndex + itemsPerPage)
 
     return {

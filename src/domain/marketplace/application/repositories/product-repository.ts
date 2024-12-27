@@ -15,7 +15,7 @@ export interface IProductRepository {
     page: number
     itemsPerPage: number
     orderBy?: 'latest' | 'alphabetic'
-    filters?: { status?: ProductStatus }
+    filters?: { status?: ProductStatus; ownerId?: string }
   }): Promise<IPaginatedResponse<Product[]>>
   findById(id: string): Promise<Product | null>
   search({
